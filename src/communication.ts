@@ -26,6 +26,7 @@ export enum MessageType {
     REQUEST_TO_JOIN_ROOM = 'request to join room',
     ROOM_MESSAGE = 'room message',
     ROOM_USERS = 'room users',
+    ROOM_USER_COUNT = 'room user count',
     ROOMS = 'rooms',
     ROOM_CREATED = 'room created',
     ROOM_JOINED = 'room joined',
@@ -118,7 +119,7 @@ export class Communication {
                 if (!isPrivate) {
                     io.emit(MessageType.ROOMS, this.roomsPayload(Array.from(this.rooms.values()).filter(r => !r.isPrivate)));
                 } else {
-
+                    socket.emit(MessageType.ROOMS, this.roomsPayload(Array.from(this.rooms.values())));
                 }
 
                 console.log('user ' + user.username + ' created room: ' + roomName);
@@ -140,8 +141,9 @@ export class Communication {
                 }
 
                 const rooms = Array.from(this.rooms.values()).filter(r => !r.isPrivate || r.owner === user.username || r.isJoined(socket.id));
-
-                socket.emit(MessageType.ROOMS, this.roomsPayload(rooms));
+                const payload = this.roomsPayload(rooms)
+                console.log("Sending rooms list", payload)
+                socket.emit(MessageType.ROOMS, payload);
             });
 
         });
@@ -170,7 +172,8 @@ export class Communication {
         return rooms.map(r => ({
             name: r.getName(),
             owner: r.owner,
-            isPrivate: r.isPrivate
+            isPrivate: r.isPrivate,
+            numUsers: r.countUsers()
         }))
     }
 

@@ -46,9 +46,7 @@ export class Room {
             socket.on(MessageType.CHAT_MESSAGE, (msg) => {
                 console.log('message: ' + msg);
 
-
                 this.broadcastMessage(socket.id, msg);
-
             });
 
 
@@ -76,7 +74,7 @@ export class Room {
                 if (existingUser && existingUser.username) {
                     socket.emit(MessageType.USERNAME_SUCCESS, `Changed username from ${existingUser.username} to ${username}`);
                 } else {
-                    socket.emit(MessageType.USERNAME_SUCCESS, `Login successfully, welcome ${username} to #${this.name}!`)
+                    socket.emit(MessageType.USERNAME_SUCCESS, `Hello ${username}, welcome to #${this.name}!`)
                 }
 
                 this.broadcastOnlineUsers();
@@ -118,5 +116,9 @@ export class Room {
 
     broadcastOnlineUsers() {
         this.namespace.emit(MessageType.ONLINE_USERS, Array.from(this.users.values()).map(u => u.username));
+    }
+
+    countUsers() {
+        return this.users.size;
     }
 }
