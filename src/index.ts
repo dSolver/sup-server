@@ -45,7 +45,8 @@ app.use('/api', middlewares, router);
 const io = new Server(server, {
     cors: {
         origin: '*', // allow all origins, this is okay because it is demo only
-    }
+    },
+    serveClient: false
 });
 
 // enable communication

@@ -153,6 +153,7 @@ export class Communication {
         this.createRoom('lobby');
         this.createRoom('general');
         this.createRoom('random');
+
     }
 
     getUser(socketId: string) {
