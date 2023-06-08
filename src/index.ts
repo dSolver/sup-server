@@ -55,5 +55,5 @@ const c = new Communication(io);
 
 
 
-server.listen(80);
+server.listen(8080);
 
